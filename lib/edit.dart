@@ -22,37 +22,30 @@ class _EditState extends State<Edit> {
   @override
   void initState() {
     super.initState();
-    //in first time, this method will be executed
     _getData();
   }
 
-  //Http to get detail data
   Future _getData() async {
     try {
-      final response = await http.get(Uri.parse(
-          //you have to take the ip address of your computer.
-          //because using localhost will cause an error
-          //get detail data with id
-          "http://192.168.223.5/latihan/detail.php?id='${widget.id}'"));
-
-      // if response successful
+      final response = await http.get(
+        Uri.parse("http://192.168.100.7/latihan/detail.php?id='${widget.id}'"),
+      );
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-
         setState(() {
           title = TextEditingController(text: data['title']);
           content = TextEditingController(text: data['content']);
         });
       }
     } catch (e) {
-      print(e);
+      return e;
     }
   }
 
   Future _onUpdate(context) async {
     try {
       return await http.post(
-        Uri.parse("http://192.168.223.5/latihan/update.php"),
+        Uri.parse("http://192.168.100.7/latihan/update.php"),
         body: {
           "id": widget.id,
           "title": title.text,
@@ -62,7 +55,7 @@ class _EditState extends State<Edit> {
         //print message after insert to database
         //you can improve this message with alert dialog
         var data = jsonDecode(value.body);
-        print(data["message"]);
+        print(data["update success"]);
 
         Navigator.of(context)
             .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
@@ -75,7 +68,7 @@ class _EditState extends State<Edit> {
   Future _onDelete(context) async {
     try {
       return await http.post(
-        Uri.parse("http://192.168.223.5/latihan/delete.php"),
+        Uri.parse("http://192.168.100.7/latihan/delete.php"),
         body: {
           "id": widget.id,
         },
@@ -83,7 +76,7 @@ class _EditState extends State<Edit> {
         //print message after insert to database
         //you can improve this message with alert dialog
         var data = jsonDecode(value.body);
-        print(data["message"]);
+        print(data["delete success"]);
 
         // Remove all existing routes until the home.dart, then rebuild Home.
         Navigator.of(context)
@@ -99,7 +92,6 @@ class _EditState extends State<Edit> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Creat New Note"),
-        // ignore: prefer_const_literals_to_create_immutables
         actions: [
           Container(
             padding: const EdgeInsets.only(right: 20),
@@ -110,7 +102,8 @@ class _EditState extends State<Edit> {
                     builder: (BuildContext context) {
                       //show dialog to confirm delete data
                       return AlertDialog(
-                        content: const Text('Are you sure you want to delete this?'),
+                        content:
+                            const Text('Are you sure you want to delete this?'),
                         actions: <Widget>[
                           ElevatedButton(
                             child: const Icon(Icons.cancel),

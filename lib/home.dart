@@ -7,12 +7,15 @@ import 'dart:convert';
 import 'package:latihan/edit.dart';
 
 class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
+
   @override
   HomeState createState() => HomeState();
 }
 
 class HomeState extends State<Home> {
   //make list variable to accomodate all data from database
+  // 1. 
   List _get = [];
 
   //make different color to different card
@@ -25,31 +28,25 @@ class HomeState extends State<Home> {
     Colors.tealAccent.shade100
   ];
 
+  // 3.
   @override
   void initState() {
     super.initState();
-    //in first time, this method will be executed
     _getData();
   }
 
+  // 2. 
   Future _getData() async {
     try {
-      final response = await http.get(Uri.parse(
-          //you have to take the ip address of your computer.
-          //because using localhost will cause an error
-          "http://192.168.223.5/latihan/list.php"));
-
-      // if response successful
+      final response = await http.get(Uri.parse("http://192.168.100.7/latihan/list.php"),);
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-
-        // entry data to variabel list _get
         setState(() {
           _get = data;
         });
       }
     } catch (e) {
-      print(e);
+      return e;
     }
   }
 
