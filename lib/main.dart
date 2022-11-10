@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:latihan/home.dart';
 
-void main() => runApp(App());
+void main() => runApp(const MyApp());
 
-class App extends StatelessWidget {
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,7 +19,7 @@ class App extends StatelessWidget {
       title: 'Flutter + PHP CRUD',
       initialRoute: '/',
       routes: {
-        '/': (context) => Home(),
+        '/': (context) => const Home(),
       },
     );
   }
